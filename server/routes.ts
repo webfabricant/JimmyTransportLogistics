@@ -3,8 +3,46 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertQuoteRequestSchema } from "@shared/schema";
 import { z } from "zod";
+import sgMail from "@sendgrid/mail";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configure SendGrid
+  if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  }
+
+  // Email sending endpoint
+  app.post("/api/send-email", async (req, res) => {
+    try {
+      if (!process.env.SENDGRID_API_KEY) {
+        return res.status(500).json({ 
+          success: false, 
+          error: "Email service not configured" 
+        });
+      }
+
+      const { to, from, subject, html, text } = req.body;
+      
+      const msg = {
+        to,
+        from,
+        subject,
+        html,
+        text,
+      };
+
+      await sgMail.send(msg);
+      
+      res.json({ success: true, message: "Email sent successfully" });
+    } catch (error) {
+      console.error('SendGrid error:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: "Failed to send email" 
+      });
+    }
+  });
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {

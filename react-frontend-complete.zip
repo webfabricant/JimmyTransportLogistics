@@ -1,0 +1,91 @@
+# Jimmy Transport Ltd - React Frontend
+
+This is a complete standalone React application for Jimmy Transport Ltd with email integration.
+
+## Project Structure
+
+```
+jimmy-transport-react/
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── tsconfig.json
+├── index.html
+├── src/
+│   ├── main.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── carousel.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── form.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── sheet.tsx
+│   │   │   ├── textarea.tsx
+│   │   │   └── toast.tsx
+│   │   ├── ContactForm.tsx
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   ├── HeroSection.tsx
+│   │   ├── ServicesCarousel.tsx
+│   │   └── QuoteModal.tsx
+│   ├── pages/
+│   │   ├── Home.tsx
+│   │   ├── Services.tsx
+│   │   ├── About.tsx
+│   │   ├── Contact.tsx
+│   │   └── NotFound.tsx
+│   ├── lib/
+│   │   ├── utils.ts
+│   │   └── emailService.ts
+│   └── hooks/
+│       └── use-toast.ts
+└── public/
+    └── vite.svg
+```
+
+## Features
+
+- Modern React 18 with TypeScript
+- Responsive design with Tailwind CSS
+- Email integration using EmailJS (no backend required)
+- Smooth animations and modern UI
+- Service carousel with navigation
+- Contact form with validation
+- Quote request modal
+- Mobile-responsive navigation
+
+## Setup Instructions
+
+1. Create a new directory and extract all files
+2. Run `npm install`
+3. Set up EmailJS:
+   - Sign up at emailjs.com
+   - Create a service and template
+   - Get your Service ID, Template ID, and Public Key
+   - Update the email service configuration
+4. Run `npm run dev`
+
+## Email Configuration
+
+Update `src/lib/emailService.ts` with your EmailJS credentials:
+
+```typescript
+const SERVICE_ID = 'your_service_id';
+const TEMPLATE_ID = 'your_template_id';
+const PUBLIC_KEY = 'your_public_key';
+```
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory.

@@ -1,22 +1,20 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { insertContactSubmissionSchema, type InsertContactSubmission } from "@shared/schema";
+import { sendContactEmail, emailSchema, type EmailFormData } from "@/lib/emailService";
 
 export default function ContactForm() {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<InsertContactSubmission>({
-    resolver: zodResolver(insertContactSubmissionSchema),
+  const form = useForm<EmailFormData>({
+    resolver: zodResolver(emailSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -27,30 +25,34 @@ export default function ContactForm() {
     },
   });
 
-  const submitContactMutation = useMutation({
-    mutationFn: async (data: InsertContactSubmission) => {
-      const response = await apiRequest("POST", "/api/contact", data);
-      return response.json();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for your inquiry. We'll get back to you within 2 hours.",
-      });
-      form.reset();
-      queryClient.invalidateQueries({ queryKey: ["/api/contact"] });
-    },
-    onError: (error: any) => {
+  const onSubmit = async (data: EmailFormData) => {
+    setIsSubmitting(true);
+    
+    try {
+      const success = await sendContactEmail(data);
+      
+      if (success) {
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for your inquiry. We'll get back to you within 2 hours.",
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
         title: "Error",
-        description: error.message || "Failed to send message. Please try again.",
+        description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
-    },
-  });
-
-  const onSubmit = (data: InsertContactSubmission) => {
-    submitContactMutation.mutate(data);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const services = [
@@ -188,10 +190,10 @@ export default function ContactForm() {
 
         <Button 
           type="submit" 
-          className="w-full bg-primary text-white hover:bg-blue-800"
-          disabled={submitContactMutation.isPending}
+          className="w-full bg-gradient-to-r from-primary to-purple-600 text-white hover:from-purple-600 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          disabled={isSubmitting}
         >
-          {submitContactMutation.isPending ? "Sending..." : "Send Quote Request"}
+          {isSubmitting ? "Sending..." : "Send Quote Request"}
         </Button>
       </form>
     </Form>
