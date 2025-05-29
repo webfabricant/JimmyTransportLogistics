@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
@@ -22,11 +22,11 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
           <DialogTitle className="text-xl font-semibold text-slate-900">
             Quick Quote Request
           </DialogTitle>
+          <DialogDescription className="text-slate-600">
+            Get a personalized quote for your transport needs. We'll respond within 2 hours.
+          </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <p className="text-slate-600 mb-6">
-            Get a personalized quote for your transport needs. We'll respond within 2 hours.
-          </p>
           <Button 
             onClick={handleRedirectToContact}
             className="w-full bg-yellow-500 text-slate-900 hover:bg-yellow-400"
