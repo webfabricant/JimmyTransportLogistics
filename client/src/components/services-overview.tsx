@@ -85,22 +85,23 @@ export default function ServicesOverview() {
           <CarouselContent className="-ml-2 md:-ml-4">
             {services.map((service, index) => (
               <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border border-slate-200 h-full">
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                      <service.icon className="w-6 h-6 text-primary" />
+                <Card className="bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-2xl card-hover border-0 h-full overflow-hidden group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <CardHeader className="relative">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <service.icon className="w-8 h-8 text-primary group-hover:text-purple-600 transition-colors duration-300" />
                     </div>
-                    <CardTitle className="text-lg text-slate-900">{service.name}</CardTitle>
+                    <CardTitle className="text-xl text-slate-900 group-hover:text-primary transition-colors duration-300">{service.name}</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-slate-600 text-sm">{service.description}</p>
+                  <CardContent className="relative">
+                    <p className="text-slate-600 text-sm leading-relaxed">{service.description}</p>
                   </CardContent>
                 </Card>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-0" />
-          <CarouselNext className="right-0" />
+          <CarouselPrevious className="left-0 bg-white/90 hover:bg-white shadow-lg border-0" />
+          <CarouselNext className="right-0 bg-white/90 hover:bg-white shadow-lg border-0" />
         </Carousel>
 
         <div className="text-center mt-12">
